@@ -3,40 +3,69 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfApp1" xmlns:views="clr-namespace:WpfApp1.Views" 
+        xmlns:local="clr-namespace:WpfApp1"
 		xmlns:vm="clr-namespace:WpfApp1.ViewModel"
 		mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 	<Window.DataContext>
 		<vm:DepositListViewModel/>
 	</Window.DataContext>
-	<StackPanel>
-		<ListView ItemsSource="{Binding Deposits}" x:Name="lv">
+	<Window.Resources>
+		<Style TargetType="Button">
+			<Setter Property="FontFamily" Value="Comic Sans MS"/>
+			<Setter Property="Background" Value="Green"/>
+			<Setter Property="Foreground" Value="Red"/>
+			<Setter Property="Margin" Value="5"/>
+			<Setter Property="Padding" Value="5"/>
+		</Style>
+		<Style x:Key="ButtonMegaEffect">
+			<Setter Property="Control.FontFamily" Value="Comic Sans MS"/>
+			<Setter Property="Control.Background" Value="Orange"/>
+			<Setter Property="Control.Foreground" Value="Red"/>
+		</Style>
+		<Style x:Key="ResultStyle">
+			<Setter Property="Control.FontSize" Value="25px"/>
+			<Setter Property="Control.FontWeight" Value="Bold"/>
+			<Setter Property="Control.FontStyle" Value="Italic"/>
+		</Style>
+	</Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<ListView ItemsSource="{Binding Deposits}" x:Name="lv" Grid.Row="0">
 			<ListView.View>
 				<GridView>
 					<GridViewColumn DisplayMemberBinding="{Binding Name}">Name</GridViewColumn>
 					<GridViewColumn DisplayMemberBinding="{Binding InterestRate}">InterestRate</GridViewColumn>
 					<GridViewColumn DisplayMemberBinding="{Binding Capitalization}">Capitalization</GridViewColumn>
-					<GridViewColumn>
+					<GridViewColumn Header="Commands">
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>
-								<Button Command="{Binding ElementName=lv,Path=DataContext.OpenCommand}" CommandParameter="{Binding .}">Open</Button>
+								<StackPanel Orientation="Horizontal">
+									<Button Command="{Binding ElementName=lv,Path=DataContext.OpenCommand}" CommandParameter="{Binding .}">Open</Button>
+									<Button Command="{Binding ElementName=lv,Path=DataContext.DeleteCommand}" 
+											CommandParameter="{Binding .}"
+											Style="{StaticResource ButtonMegaEffect}">X</Button>
+								</StackPanel>
 							</DataTemplate>
 						</GridViewColumn.CellTemplate>
 					</GridViewColumn>
-					<GridViewColumn Header="Delete">
+					<GridViewColumn Header="Dep Result" Width="250px">
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>
-								<Button Command="{Binding ElementName=lv,Path=DataContext.DeleteCommand}" CommandParameter="{Binding .}">X</Button>
-								<!--<Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListView}, Path=DataContext.DeleteCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=x}">X</Button>-->
+								<TextBlock Text="{Binding Result}" Style="{StaticResource ResultStyle}"/>
 							</DataTemplate>
 						</GridViewColumn.CellTemplate>
 					</GridViewColumn>
 				</GridView>
 			</ListView.View>
 		</ListView>
-		<Button Command="{Binding AddCommand}">
+		<Button Command="{Binding AddCommand}" 
+				Grid.Row="1">
 			Add
 		</Button>
-	</StackPanel>
+
+	</Grid>
 </Window>

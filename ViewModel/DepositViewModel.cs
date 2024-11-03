@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,67 +8,53 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using WpfApp1.Commands;
 using WpfApp1.Models;
 
 namespace WpfApp1.ViewModel {
 
-	public class DepositViewModel : ViewModelBase {
-		private Deposit _deposit;
+	public class DepositViewModel : ObservableObject {
+
+		private Deposit? _deposit;
 		public ICommand SaveCommand { get; set; }
 		public DepositViewModel() {
 			_deposit = new Deposit();
-			SaveCommand = new RelayCommand((param) => SaveItem());
 		}
-
-		public void SaveItem() {
-			OnPropertyChanged(nameof(DepositListViewModel.Deposits));
-		}
-
 		public DepositViewModel(Deposit deposit) {
 			_deposit = deposit;
 			CalculateDeposit();
 		}
 		public string Name {
-			get => _deposit.Name; set {
-				_deposit.Name = value;
-				OnPropertyChanged(nameof(Name));
-			}
+			get => _deposit.Name;
+			set => SetProperty(_deposit.Name, value, _deposit, (dep,val) => dep.Name = val);
 		}
 		public Decimal InterestRate {
 			get => _deposit.InterestRate; set {
-				_deposit.InterestRate = value;
-				OnPropertyChanged(nameof(InterestRate));
+				SetProperty(_deposit.InterestRate, value, _deposit, (dep, val) => dep.InterestRate = val);
 				CalculateDeposit();
 			}
 		}
 		public int MonthDuration {
 			get => _deposit.MonthDuration; set {
-				_deposit.MonthDuration = value;
-				OnPropertyChanged(nameof(MonthDuration));
+				SetProperty(_deposit.MonthDuration, value, _deposit, (dep, val) => dep.MonthDuration = val);
 				CalculateDeposit();
 			}
 		}
 
 		public bool Capitalization {
 			get => _deposit.Capitalization; set {
-				_deposit.Capitalization = value;
-				OnPropertyChanged(nameof(Capitalization));
+				SetProperty(_deposit.Capitalization, value, _deposit, (dep, val) => dep.Capitalization = val);
 				CalculateDeposit();
 			}
 		}
 
 		public Decimal Result {
-			get => _deposit.Result; set {
-				_deposit.Result = value;
-				OnPropertyChanged(nameof(Result));
-			}
+			get => _deposit.Result; 
+			set => SetProperty(_deposit.Result, value, _deposit, (dep, val) => dep.Result = val);
 		}
 
 		public Decimal DepositAmount {
 			get => _deposit.DepositAmount; set {
-				_deposit.DepositAmount = value;
-				OnPropertyChanged(nameof(DepositAmount));
+				SetProperty(_deposit.DepositAmount, value, _deposit, (dep, val) => dep.DepositAmount = val);
 				CalculateDeposit();
 			}
 		}
